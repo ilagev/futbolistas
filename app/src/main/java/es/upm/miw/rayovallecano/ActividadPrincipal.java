@@ -5,9 +5,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import es.upm.miw.rayovallecano.models.Futbolista;
+import es.upm.miw.rayovallecano.models.RepositorioFutbolistas;
 
 public class ActividadPrincipal extends AppCompatActivity {
 
@@ -26,6 +30,10 @@ public class ActividadPrincipal extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        RepositorioFutbolistas repositorio = new RepositorioFutbolistas(getApplicationContext());
+
+        Log.i("Num", String.format("%d", repositorio.add(new Futbolista(1, "Jugador 1", 1, true, "Primera", null))));
     }
 
     @Override

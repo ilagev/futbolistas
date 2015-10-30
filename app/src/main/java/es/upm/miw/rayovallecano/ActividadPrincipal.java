@@ -9,11 +9,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 import es.upm.miw.rayovallecano.models.Futbolista;
 import es.upm.miw.rayovallecano.models.RepositorioFutbolistas;
 
 public class ActividadPrincipal extends AppCompatActivity {
+
+    ArrayList<Futbolista> futbolistas;
+    ListView lvListadoFutbolistas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +38,16 @@ public class ActividadPrincipal extends AppCompatActivity {
             }
         });
 
-        RepositorioFutbolistas repositorio = new RepositorioFutbolistas(getApplicationContext());
+        RepositorioFutbolistas repositorio = new RepositorioFutbolistas(this);
 
-        Log.i("Num", String.format("%d", repositorio.add(new Futbolista(1, "Jugador 1", 1, true, "Primera", null))));
+        int num = (int) (100 * Math.random());
+        Log.i("Num", String.format("%d", repositorio.add(
+                new Futbolista(num, "Jugador " + String.format("%d", num), num, num % 2 == 0, "Primera", null))));
+
+        futbolistas = repositorio.getAll();
+        ArrayAdapter<Futbolista> adaptador = new FutbolistaAdapter(this, futbolistas);
+        lvListadoFutbolistas = (ListView) findViewById(R.id.lvListadoFutbolistas);
+        lvListadoFutbolistas.setAdapter(adaptador);
     }
 
     @Override

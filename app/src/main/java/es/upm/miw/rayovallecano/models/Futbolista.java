@@ -1,7 +1,10 @@
 package es.upm.miw.rayovallecano.models;
 
 
-public class Futbolista {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Futbolista implements Parcelable {
 
     private int _id;
     private String _nombre;
@@ -87,4 +90,54 @@ public class Futbolista {
                 ", _url_imagen='" + _url_imagen + '\'' +
                 '}';
     }
+
+    /**
+     * Describe the kinds of special objects contained in this Parcelable's
+     * marshalled representation.
+     *
+     * @return a bitmask indicating the set of special object types marshalled
+     * by the Parcelable.
+     */
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    /**
+     * Flatten this object in to a Parcel.
+     *
+     * @param dest  The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     */
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(_id);
+        dest.writeString(_nombre);
+        dest.writeInt(_dorsal);
+        dest.writeInt((byte) (_lesionado ? 1 : 0));
+        dest.writeString(_equipo);
+        dest.writeString(_url_imagen);
+    }
+
+    public static final Parcelable.Creator<Futbolista> CREATOR
+            = new Parcelable.Creator<Futbolista>() {
+        public Futbolista createFromParcel(Parcel in) {
+            return new Futbolista(in);
+        }
+
+        public Futbolista[] newArray(int size) {
+            return new Futbolista[size];
+        }
+    };
+
+    private Futbolista(Parcel origen) {
+        this._id         = origen.readInt();        // id
+        this._nombre     = origen.readString();     // nombre
+        this._dorsal     = origen.readInt();        // dorsal
+        this._lesionado  = origen.readByte() != 0;  // lesionado
+        this._equipo     = origen.readString();     // equipo
+        this._url_imagen = origen.readString();     // url_imagen
+    }
+
 }

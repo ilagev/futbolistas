@@ -5,6 +5,8 @@ import android.provider.BaseColumns;
 
 public abstract class FutbolistaContract {
 
+    public FutbolistaContract() {}
+
     public static class tablaFutbolista implements BaseColumns {
 
         public static final String TABLE_NAME = "futbolistas";

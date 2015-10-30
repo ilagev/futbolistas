@@ -1,5 +1,6 @@
 package es.upm.miw.rayovallecano;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -48,7 +50,20 @@ public class ActividadPrincipal extends AppCompatActivity {
         ArrayAdapter<Futbolista> adaptador = new FutbolistaAdapter(this, futbolistas);
         lvListadoFutbolistas = (ListView) findViewById(R.id.lvListadoFutbolistas);
         lvListadoFutbolistas.setAdapter(adaptador);
+
+        lvListadoFutbolistas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // TODO editar futbolistas
+                // Toast.makeText(contexto, futbolistas.get(position).toString(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ActividadPrincipal.this, ActividadMostrarFutbolista.class);
+                // TO DO Parcelable
+                intent.putExtra("MOSTRAR_Futbolista", futbolistas.get(position));
+                startActivity(intent);
+            }
+        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -62,13 +77,16 @@ public class ActividadPrincipal extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // TODO Ajustes
+                break;
+            case R.id.accionVaciar:
+                // TODO dialog(confirmar) -> vaciar  tabla
+                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 }

@@ -68,34 +68,102 @@ public class RepositorioFutbolistas extends SQLiteOpenHelper {
         return db.insert(tablaFutbolista.TABLE_NAME, null, valores);
     }
 
+    /**
+     * Recupera todos los pilotos de la tabla ordenados por ID
+     * @see #getAll(String , boolean)
+     * @return Array de pilotos ordenados por ID
+     */
     public ArrayList<Futbolista> getAll() {
-        ArrayList<Futbolista> futbolistas = new ArrayList<>();
-        String consultaSQL = "SELECT * FROM " + tablaFutbolista.TABLE_NAME;
+        return getAll(tablaFutbolista.COL_NAME_ID, true);
+    }
 
-        SQLiteDatabase db = getReadableDatabase();
+    /**
+     * Recupera todos los pilotos de la tabla ordenados por la columna proporcionada
+     * @return Array de pilotos ordenados
+     */
+    public ArrayList<Futbolista> getAll(String columna, boolean ordenAscendente) {
+        ArrayList<Futbolista> resultado = new ArrayList<>();
+        String consultaSQL = "SELECT * FROM " + tablaFutbolista.TABLE_NAME
+                + " ORDER BY " + columna + (ordenAscendente ? " ASC" : " DESC");
 
-        // hacer consulta y recuperar información
+        // TO DO abrir bd lectura
+        // Accedo a la DB en modo lectura
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(consultaSQL, null);
 
-        if (cursor.moveToFirst()) {  // si hay datos
+        // TO DO recorrer cursor asignando resultados
+        if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 Futbolista futbolista = new Futbolista(
-                    cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_ID)),
-                    cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_NOMBRE)),
-                    cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_DORSAL)),
-                    cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_LESIONADO)) != 0,
-                    cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_EQUIPO)),
-                    cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_URL))
+                        cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_ID)),
+                        cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_NOMBRE)),
+                        cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_DORSAL)),
+                        cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_LESIONADO)) != 0,
+                        cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_EQUIPO)),
+                        cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_URL))
                 );
-
-                futbolistas.add(futbolista);
+                resultado.add(futbolista);
                 cursor.moveToNext();
             }
+            cursor.close();
         }
 
+        return resultado;
+    }
 
+    /**
+     * Devuelve el número de futbolistas de la tabla
+     * @return Número de futbolistas
+     */
+    public long count() {
+        String consultaSQL = "SELECT COUNT(*) FROM " + tablaFutbolista.TABLE_NAME;
 
-        return futbolistas;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(consultaSQL, null);
+        cursor.moveToFirst();
+        long numero = cursor.getLong(0);
+        cursor.close();
+
+        return numero;
+    }
+
+    /**
+     * Elimina todos los futbolistas
+     * @return long Número de filas eliminadas
+     */
+    public long deleteAll() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(tablaFutbolista.TABLE_NAME, "1", null);
+    }
+
+    /**
+     * Recupera un futbolista por ID
+     * @param id Identificador del futbolista
+     * @return  futbolistas
+     */
+    public Futbolista getPilotoByID(int id) {
+        String consultaSQL = "SELECT * FROM " + tablaFutbolista.TABLE_NAME
+                + " WHERE " + tablaFutbolista.COL_NAME_ID + " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Futbolista futbolista = null;
+        Cursor cursor = db.rawQuery(
+                consultaSQL,
+                new String[]{ String.valueOf(id) }
+        );
+
+        if (cursor.moveToFirst()) {
+            futbolista = new Futbolista(
+                    cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_ID)),           // id
+                    cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_NOMBRE)),    // nombre
+                    cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_DORSAL)),       // dorsal
+                    cursor.getInt(cursor.getColumnIndex(tablaFutbolista.COL_NAME_LESIONADO)) != 0,  // lesionado
+                    cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_EQUIPO)),    // equipo
+                    cursor.getString(cursor.getColumnIndex(tablaFutbolista.COL_NAME_URL))        // imagen_url
+            );
+            cursor.close();
+        }
+
+        return futbolista;
     }
 
 }

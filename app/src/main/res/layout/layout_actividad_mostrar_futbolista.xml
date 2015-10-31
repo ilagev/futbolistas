@@ -27,6 +27,12 @@
         android:orientation="vertical"
         android:layout_weight="3">
 
+        <ImageView
+            android:id="@+id/ivMostrarFutbolistaLesionado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/altFutbolistaActivo" />
+
         <TextView
             android:id="@+id/tvMostrarFutbolistaId"
             android:layout_width="match_parent"
@@ -46,12 +52,6 @@
             android:id="@+id/tvMostrarFutbolistaEquipo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-        <ImageView
-            android:id="@+id/ivMostrarFutbolistaLesionado"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/altFutbolistaActivo" />
 
     </LinearLayout>
 

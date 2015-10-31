@@ -13,6 +13,8 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -71,19 +73,14 @@ public class ActividadMostrarFutbolista extends AppCompatActivity {
             //
             // podría ser... pero lanza NetworkOnMainThreadException
 
-            ImageView ivContenido = (ImageView) findViewById(R.id.ivMostrarFutbolistaLesionado);
-
-            // TareaCargarImagen tarea = new TareaCargarImagen();
-            // ivImagenPiloto.setTag(piloto.get_url_imagen());
-            // tarea.execute(ivImagenPiloto);
-
+            /*ImageView ivContenido = (ImageView) findViewById(R.id.ivMostrarFutbolistaLesionado);
             TareaCargarImagen tci = new TareaCargarImagen(futbolista.get_url_imagen());
             ivContenido.setTag(futbolista.get_url_imagen());
-            tci.execute(ivContenido);
+            tci.execute(ivContenido);*/
 
             // Picasso.with(context).load(url).into(imageView);
             // http://square.github.io/picasso/
-            // Picasso.with(contexto).load(futbolista.get_url_imagen()).into(ivImagenFutbolista);
+            Picasso.with(contexto).load(futbolista.get_url_imagen()).into(ivImagenFutbolista);
 
 
 

@@ -1,14 +1,21 @@
 package es.upm.miw.rayovallecano;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import es.upm.miw.rayovallecano.models.Futbolista;
 
@@ -64,17 +71,58 @@ public class ActividadMostrarFutbolista extends AppCompatActivity {
             //
             // podría ser... pero lanza NetworkOnMainThreadException
 
+            ImageView ivContenido = (ImageView) findViewById(R.id.ivMostrarFutbolistaLesionado);
+
             // TareaCargarImagen tarea = new TareaCargarImagen();
             // ivImagenPiloto.setTag(piloto.get_url_imagen());
             // tarea.execute(ivImagenPiloto);
 
+            TareaCargarImagen tci = new TareaCargarImagen(futbolista.get_url_imagen());
+            ivContenido.setTag(futbolista.get_url_imagen());
+            tci.execute(ivContenido);
+
             // Picasso.with(context).load(url).into(imageView);
             // http://square.github.io/picasso/
             // Picasso.with(contexto).load(futbolista.get_url_imagen()).into(ivImagenFutbolista);
+
+
+
         }
 
         setResult(RESULT_OK);
     }
+
+    private class TareaCargarImagen extends AsyncTask<ImageView, Void, Bitmap> {
+
+        String URL_OBJETIVO;
+
+        TareaCargarImagen(String url) {
+            URL_OBJETIVO = url;
+        }
+
+        ImageView imageView = null;
+
+        @Override
+        protected Bitmap doInBackground(ImageView... imageViews) {
+            this.imageView = imageViews[0];
+            Bitmap bmp = null;
+            try {
+                //String url = imageView.getTag().toString();
+                URL ulrn = new URL(URL_OBJETIVO);   // imageView.getTag()
+                HttpURLConnection con = (HttpURLConnection) ulrn.openConnection();
+                InputStream is = con.getInputStream();
+                bmp = BitmapFactory.decodeStream(is);
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage());
+            }
+            return bmp;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
+    } // TareaCargarImagen
 
     /**
      * Determina si hay conexión a la red (wifi ó movil)

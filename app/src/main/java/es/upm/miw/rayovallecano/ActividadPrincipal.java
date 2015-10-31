@@ -46,6 +46,11 @@ public class ActividadPrincipal extends AppCompatActivity {
         Log.i("Num", String.format("%d", repositorio.add(
                 new Futbolista(num, "Jugador " + String.format("%d", num), num, num % 2 == 0, "Primera", null))));
 
+        repositorio.add(
+                new Futbolista(++num, "Jugador " + String.format("%d", num), num, num% 2 == 0, "Primera",
+                        "http://j4loxa.com/sna/TAEE/2011/img/upm.png")
+        );
+
         futbolistas = repositorio.getAll();
         ArrayAdapter<Futbolista> adaptador = new FutbolistaAdapter(this, futbolistas);
         lvListadoFutbolistas = (ListView) findViewById(R.id.lvListadoFutbolistas);
